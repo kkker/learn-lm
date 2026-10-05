@@ -1,12 +1,21 @@
 <?php
 // 模擬從產線（或前端網頁表單）取得的即時感測器數據
-$sensor_data = [
+$sensor_data = [ // Machine failure data
     'air_temp'     => 298.1, // 空氣溫度 (K)
     'process_temp' => 308.6, // 製程溫度 (K)
     'rpm'          => 2800,  // 轉速超高 (容易發生功率或散熱故障)
     'torque'       => 55.0,  // 扭力 (Nm)
     'tool_wear'    => 210    // 刀具已磨損 210 分鐘 (接近臨界值)
 ];
+
+$sensor_data = [ // Machine ok data
+    'air_temp'     => 298.8, // 空氣溫度 (K)
+    'process_temp' => 309.2, // 製程溫度 (K)
+    'rpm'          => 1306,  // 轉速
+    'torque'       => 54.5,  // 扭力 (Nm)
+    'tool_wear'    => 50    // 刀具已磨損 50 分鐘
+];
+
 
 // Python Flask API 在 Docker 內的網址 (因為在同個容器，可用 localhost)
 $url = 'http://localhost:5000/predict';
@@ -28,5 +37,6 @@ if ($result && $result['status'] === 'success') {
     echo "系統提示訊息: " . $result['message'] . "\n";
 } else {
     echo "系統錯誤: 無法連線至 AI 預測模組。\n";
+    echo $response;
 }
 echo "====================================================\n";
