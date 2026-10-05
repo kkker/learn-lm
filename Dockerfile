@@ -1,6 +1,6 @@
 FROM debian:bookworm-slim
 
-# 安裝系統基本套件、Python 與 Nginx
+# 安裝系統基本套件、Python、Nginx 以及 PHP (含 cURL 擴充套件)
 RUN apt-get update && apt-get install -y \
     python3 \
     python3-pip \
@@ -8,10 +8,12 @@ RUN apt-get update && apt-get install -y \
     nginx \
     curl \
     git \
+    php-cli \
+    php-curl \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# 建立虛擬環境並安裝 AI 套件 (這樣不會污染系統)
+# 建立虛擬環境並安裝 AI 套件 (避免污染系統)
 RUN python3 -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
@@ -28,4 +30,3 @@ WORKDIR /var/www/html
 EXPOSE 80 5000
 
 CMD ["tail", "-f", "/dev/null"]
-
